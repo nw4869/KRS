@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <div>
+        <h1 class="h3 mb-3 font-weight-normal">测试结果</h1>
+        <ul class="list-group">
+            {% for examination in object_list %}
+                <li class="list-group-item">
+                    <span><a href="{% url 'examination-detail' pk=examination.id %}">{{ examination.question_set.name }}</a></span>
+                    <span style="float:right; display:block">{{ examination.start_time }} - {{ examination.finish_time|default:"进行中" }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
