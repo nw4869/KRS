@@ -16,8 +16,10 @@ class Examination(models.Model):
 
 
 class UserChoice(models.Model):
+    examination = models.ForeignKey(Examination, on_delete=models.CASCADE)
+    question = models.ForeignKey(ChoiceQuestion, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'user: {}, choice: {}'.format(self.user, self.choice)
+        return 'user: {}, choice: {}, examination: {}'.format(self.user, self.choice, self.examination.question_set.name)
