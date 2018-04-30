@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
+{% load question %}
 
 {% block content %}
     <div>
         <h1 class="h3 mb-3 font-weight-normal">{{ examination.question_set.name }}</h1>
         <span>{{ examination.start_time }} - {{ examination.finish_time|default:"进行中" }}</span>
-{#        <ul class="list-group">#}
-{#            {% for examination in object_list %}#}
-{#                <li class="list-group-item">#}
-{#                    <span><a href="javascript:void(0)">{{ examination.question_set.name }}</a></span>#}
-{#                    <span style="float:right; display:block">{{ examination.start_time }} - {{ examination.finish_time|default:"进行中" }}</span>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
+        <hr>
+        <div>
+            {% for question in examination.question_set.questions.all %}
+                <div class="mt-3">
+                    <h2 class="h5 font-weight-normal">{{ question.content|question_display:forloop.counter0 }}</h2>
+                    <div class="row mt-1">
+                        {% for choice in question.choice_set.all %}
+                            <div class="col-lg-3 col-md-6">
+                                <label>
+                                    <input type="radio" name="{{ question.id }}" value="{{ choice.id }}"/>
+                                    {{ choice.content|choice_display:forloop.counter0 }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

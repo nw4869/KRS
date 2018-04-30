@@ -4,6 +4,6 @@ from .models import QuestionSet
 
 
 class QuestionSetListView(LoginRequiredMixin, ListView):
-    queryset = QuestionSet.objects.filter(is_published=True)
+    queryset = QuestionSet.objects.filter(is_published=True).order_by('-created_time')
     paginate_by = 20
 

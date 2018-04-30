@@ -9,7 +9,7 @@ class ExaminationListView(LoginRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Examination.objects.filter(user=self.request.user)
+        return Examination.objects.filter(user=self.request.user).order_by('-start_time')
 
 
 class ExaminationDetailView(LoginRequiredMixin, DetailView):
