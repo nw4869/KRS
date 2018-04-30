@@ -16,12 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+
+from account.views import RegisterView
 from examination.views import ExaminationListView, ExaminationDetailView, ExaminationCreateView
 from question.views import QuestionSetListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/register', RegisterView.as_view(), name='register'),
 
     path('question/', QuestionSetListView.as_view(), name='questionset-list'),
 
