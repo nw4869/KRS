@@ -28,22 +28,22 @@ class ExaminationDetailView(LoginRequiredMixin, DetailView):
     def post(self, request, pk):
         self.object = self.get_object()
 
+        self.save_user_choices()
+
         is_submit = self.request.POST.get('submit')
         if is_submit == 'true':
-            return self.submit_examination()
-        else:
-            return self.save_state_and_render()
+            self.submit_examination()
+
+        user_choices = self.get_user_choices(self.object, self.request.user)
+        return self.render_to_response(self.get_context_data(user_choices=user_choices))
 
     def submit_examination(self):
         self.object.finish_time = timezone.now()
         self.object.save()
-        return self.render_to_response(self.get_context_data())
 
-    def save_state_and_render(self):
+    def save_user_choices(self):
         posted_user_choices = self.get_user_choices_from_form(self.request.POST)
         self.update_user_choices(posted_user_choices)
-        user_choices = self.get_user_choices(self.object, self.request.user)
-        return self.render_to_response(self.get_context_data(user_choices=user_choices))
 
     def get_user_choices_from_form(self, form_data):
         user_choices = {}
