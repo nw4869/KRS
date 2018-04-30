@@ -17,7 +17,9 @@
                             {% for choice in question.choice_set.all %}
                                 <div class="col-lg-3 col-md-6">
                                     <label>
-                                        <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}" {{ choice.id|choice_checked:user_choices }} />
+                                        <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}"
+                                                {{ choice.id|choice_checked:user_choices }}
+                                                {{ choice|choice_disabled:object }} />
                                         {{ choice.content|choice_display:forloop.counter0 }}
                                     </label>
                                 </div>
@@ -28,8 +30,8 @@
                 <input type="hidden" name="submit">
             </div>
             <div class="mt-4">
-                <button id="btn-save" type="submit" class="btn btn-outline-primary" style="width: 8em">保存</button>
-{#                <button id="btn-submit" type="submit" class="btn btn-outline-success ml-3 confirm-alert" style="width: 8em">提交</button>#}
+                <button id="btn-save" type="submit" class="btn btn-outline-primary" style="width: 8em" {{ object|examination_disabled }}>保存</button>
+                <button id="btn-submit" type="submit" class="btn btn-outline-success ml-3 confirm-alert" style="width: 8em" {{ object|examination_disabled }}>提交</button>
             </div>
         </form>
     </div>
@@ -41,9 +43,9 @@ $(function () {
     $('#btn-save').on('click', function (e) {
         $('input[name="submit"]').val('false')
     })
-//    $('#btn-submit').on('click', function (e) {
-//        $('input[name="submit"]').val('true')
-//    })
+    $('#btn-submit').on('click', function (e) {
+        $('input[name="submit"]').val('true')
+    })
 })
 </script>
 {% endblock %}

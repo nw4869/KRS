@@ -2,6 +2,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, View
+from django.utils import timezone
 from .models import Examination, QuestionSet, UserChoice
 import re
 
@@ -27,7 +28,18 @@ class ExaminationDetailView(LoginRequiredMixin, DetailView):
     def post(self, request, pk):
         self.object = self.get_object()
 
-        print(request.POST)
+        is_submit = self.request.POST.get('submit')
+        if is_submit == 'true':
+            return self.submit_examination()
+        else:
+            return self.save_state_and_render()
+
+    def submit_examination(self):
+        self.object.finish_time = timezone.now()
+        self.object.save()
+        return self.render_to_response(self.get_context_data())
+
+    def save_state_and_render(self):
         posted_user_choices = self.get_user_choices_from_form(self.request.POST)
         self.update_user_choices(posted_user_choices)
         user_choices = self.get_user_choices(self.object, self.request.user)
