@@ -40,13 +40,30 @@ class ExaminationDetailView(LoginRequiredMixin, DetailView):
         context = super(ExaminationDetailView, self).get_context_data(**kwargs)
         context['user_choices'] = kwargs.get('user_choices') or self.get_user_choices(self.object, self.request.user)
         context['title'] = self.get_title()
+        if self.object.is_finished():
+            context['score'] = self.get_score()
+            context['recommends'] = self.get_recommends()
         return context
 
     def get_title(self):
         title = self.object.question_set.name
-        if self.object.is_finished():
-            title += ' - 测试结果'
+        # if self.object.is_finished():
+        #     title += ' - 测试结果'
         return title
+
+    def get_score(self):
+        examination = self.object
+        user = self.request.user
+        correct_count = 0
+        for user_choice in UserChoice.objects.filter(examination=examination, user=user):
+            question = user_choice.question
+            if question.answer == user_choice.choice:
+                correct_count += 1
+        total_questions = examination.question_set.questions.count()
+        return correct_count / total_questions * 100
+
+    def get_recommends(self):
+        return ['极限', '导数', '一元积分']
 
     def post(self, request, pk):
         self.object = self.get_object()

@@ -1,4 +1,5 @@
 from django import template
+from django.utils import timezone
 
 register = template.Library()
 
@@ -31,3 +32,8 @@ def choice_disabled(choice, examination):
 @register.filter
 def choice_answer_class(choice, question):
     return 'text-danger' if question.answer == choice else ''
+
+
+@register.filter
+def time_delta(time_from, time_to):
+    time_to - time_from
