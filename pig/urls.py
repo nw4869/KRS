@@ -32,5 +32,5 @@ urlpatterns = [
     path('examination/start', ExaminationCreateView.as_view(), name='examination-create'),
     path('examination/<int:pk>', ExaminationDetailView.as_view(), name='examination-detail'),
 
-    path('', TemplateView.as_view(template_name='home.html'), name='home')
+    path('', TemplateView.as_view(template_name='home.html', extra_context={'title': '欢迎使用在线知识点测评系统'}), name='home')
 ]

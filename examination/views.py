@@ -10,6 +10,11 @@ import re
 class ExaminationListView(LoginRequiredMixin, ListView):
     paginate_by = 20
 
+    def get_context_data(self, **kwargs):
+        context = super(ExaminationListView, self).get_context_data(**kwargs)
+        context['title'] = '测试结果'
+        return context
+
     def get_queryset(self):
         return Examination.objects.filter(user=self.request.user).order_by('-start_time')
 
@@ -17,13 +22,31 @@ class ExaminationListView(LoginRequiredMixin, ListView):
 class ExaminationDetailView(LoginRequiredMixin, DetailView):
     question_prefix = 'question'
 
+    def get_template_names(self):
+        """
+        根据 Exam 状态渲染不同html页面
+        :return:
+        """
+        if self.object.finish_time:
+            self.template_name_suffix = '_result'
+        else:
+            self.template_name_suffix = '_detail'
+        return super(ExaminationDetailView, self).get_template_names()
+
     def get_queryset(self):
         return Examination.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(ExaminationDetailView, self).get_context_data(**kwargs)
         context['user_choices'] = kwargs.get('user_choices') or self.get_user_choices(self.object, self.request.user)
+        context['title'] = self.get_title()
         return context
+
+    def get_title(self):
+        title = self.object.question_set.name
+        if self.object.is_finished():
+            title += ' - 测试结果'
+        return title
 
     def post(self, request, pk):
         self.object = self.get_object()

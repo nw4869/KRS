@@ -9,6 +9,9 @@ class Examination(models.Model):
     finish_time = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def is_finished(self):
+        return self.finish_time is not None
+
     def __str__(self):
         return 'QS: {}, user: {}, start_time: {}'.format(self.question_set.name,
                                                          self.user,

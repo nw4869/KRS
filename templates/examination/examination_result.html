@@ -15,7 +15,7 @@
                         <div class="row mt-1">
                             {% for choice in question.choice_set.all %}
                                 <div class="col-lg-3 col-md-6">
-                                    <label>
+                                    <label class="{{ choice|choice_answer_class:question }}">
                                         <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}"
                                                 {{ choice.id|choice_checked:user_choices }}
                                                 {{ choice|choice_disabled:object }} />
@@ -27,10 +27,6 @@
                     </div>
                 {% endfor %}
                 <input type="hidden" name="submit">
-            </div>
-            <div class="mt-4">
-                <button id="btn-save" type="submit" class="btn btn-outline-primary" style="width: 8em" {{ object|examination_disabled }}>保存</button>
-                <button id="btn-submit" type="submit" class="btn btn-outline-success ml-3 confirm-alert" style="width: 8em" {{ object|examination_disabled }}>提交</button>
             </div>
         </form>
     </div>

@@ -26,3 +26,8 @@ def examination_disabled(examination):
 @register.filter
 def choice_disabled(choice, examination):
     return examination_disabled(examination)
+
+
+@register.filter
+def choice_answer_class(choice, question):
+    return 'text-danger' if question.answer == choice else ''
