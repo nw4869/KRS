@@ -22,7 +22,7 @@
             {% endfor %}
             </ul>
         </div>
-        <h2 class="h4 mt-5">答题记录</h2>
+        <h2 class="h4 mt-5">正确答案</h2>
         <hr>
         <form method="post" >
             {% csrf_token %}
@@ -33,7 +33,7 @@
                         <div class="row mt-1">
                             {% for choice in question.choice_set.all %}
                                 <div class="col-lg-3 col-md-6">
-                                    <label class="{{ choice|choice_answer_class:question }}">
+                                    <label class="{{ choice|choice_answer_class:user_choices }}">
                                         <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}"
                                                 {{ choice.id|choice_checked:user_choices }}
                                                 {{ choice|choice_disabled:object }} />

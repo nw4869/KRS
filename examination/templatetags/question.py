@@ -30,8 +30,15 @@ def choice_disabled(choice, examination):
 
 
 @register.filter
-def choice_answer_class(choice, question):
-    return 'text-danger' if question.answer == choice else ''
+def choice_answer_class(choice, user_choices):
+    question = choice.question
+    if question.answer == choice:
+        if str(choice.id) in user_choices.values():
+            return 'text-success'
+        else:
+            return 'text-danger'
+    else:
+        return ''
 
 
 @register.filter
