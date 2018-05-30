@@ -63,7 +63,7 @@ class ExaminationDetailView(LoginRequiredMixin, DetailView):
         return correct_count / total_questions * 100
 
     def get_recommends(self):
-        return ['极限', '导数', '一元积分']
+        return ['指针的用法', '函数的应用', '数组的应用']
 
     def post(self, request, pk):
         self.object = self.get_object()
